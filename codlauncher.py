@@ -105,7 +105,7 @@ class CODLauncherGUI:
         for game, modes in options.items():
             for option in modes:
                 mode = option["mode"]
-                button_command = lambda game=game, option=option: self.run_mode(
+                button_command = lambda game=game, option=option: self.run_game(
                     game, option
                 )
                 button = tk.Button(
@@ -158,13 +158,13 @@ class CODLauncherGUI:
         with open(CONFIG_FILE, "w") as file:
             self.config.write(file)
 
-    def run_mode(self, game, option):
+    def run_game(self, game, option):
         os.chdir(self.base_path)
         self.update_name()
         try:
             abs_mode_dir = self.config.get("paths", game)
         except NoOptionError as e:
-            error_message = f"Failed to run the mode: {e}"
+            error_message = f"Failed to run the game: {e}"
             messagebox.showerror("Error", error_message)
             return
 
@@ -216,7 +216,7 @@ class CODLauncherGUI:
             print(command)
             process = subprocess.run(command, shell=True)
         except subprocess.CalledProcessError as e:
-            error_message = f"Failed to run the mode: {e}"
+            error_message = f"Failed to run the game: {e}"
             messagebox.showerror("Error", error_message)
             return
 
