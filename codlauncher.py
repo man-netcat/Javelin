@@ -57,7 +57,7 @@ class CODLauncherGUI:
 
         alterware = tk.Button(
             binary_buttons_frame,
-            text="Add AlterWare Binary",
+            text="Set AlterWare Binary",
             width=BUTTON_WIDTH,
             height=BUTTON_HEIGHT,
             padx=BUTTON_PADX,
@@ -71,7 +71,7 @@ class CODLauncherGUI:
 
         plutonium = tk.Button(
             binary_buttons_frame,
-            text="Add Plutonium Binary",
+            text="Set Plutonium Binary",
             width=BUTTON_WIDTH,
             height=BUTTON_HEIGHT,
             padx=BUTTON_PADX,
@@ -138,9 +138,7 @@ class CODLauncherGUI:
         exit.pack()
 
     def add_binary(self, config_key, filename):
-        binary_path = filedialog.askopenfilename(
-            filetypes=[("Executable files", filename)]
-        )
+        binary_path = filedialog.askopenfilename(filetypes=[("", filename)])
         if binary_path:
             self.config.set("paths", config_key, binary_path)
             self.update_config()
