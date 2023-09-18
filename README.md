@@ -7,7 +7,7 @@ Supports the following clients:
 - h2-mod
 - ezboiii
 
-You'll need to provide the paths for each game you have installed individually. 
+You'll need to provide the paths for each game you have installed individually. Besides the paths for each game you must also provide the following where applicable:
 
 - For Plutonium, provide the path to the folder in %localappdata%. (it contains a bin and games folder)
 - For Alterware, provide a directory containing the alterware-launcher.exe
