@@ -7,4 +7,7 @@ Supports the following clients:
 - h2-mod
 - ezboiii
 
-You'll need to provide the paths for your AlterWare and Plutonium clients. Drop ezboiii and h2-mod in the corresponding folders where applicable. All games must be owned on steam for this launcher to work. Cracked copies will __not__ work.
+You'll need to provide the paths for your AlterWare and Plutonium clients. 
+For Plutonium, provide the path to the folder in %localappdata%. (it contains a bin and games folder)
+For Alterware, provide a directory containing the alterware-launcher.exe
+Drop ezboiii and h2-mod in the corresponding folders where applicable. All games must be owned on steam for this launcher to work. Cracked copies will __not__ work.
