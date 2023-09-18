@@ -57,29 +57,25 @@ class CODLauncherGUI:
 
         alterware = tk.Button(
             binary_buttons_frame,
-            text="Set AlterWare Binary",
+            text="Change AlterWare Path",
             width=BUTTON_WIDTH,
             height=BUTTON_HEIGHT,
             padx=BUTTON_PADX,
             pady=BUTTON_PADY,
             highlightthickness=BUTTON_HIGHLIGHT_THICKNESS,
-            command=lambda: self.add_binary(
-                "alterware_binary", "alterware-launcher.exe"
-            ),
+            command=lambda: self.select_path("AlterWare"),
         )
         alterware.grid(row=0, column=0)
 
         plutonium = tk.Button(
             binary_buttons_frame,
-            text="Set Plutonium Binary",
+            text="Change Plutonium Path",
             width=BUTTON_WIDTH,
             height=BUTTON_HEIGHT,
             padx=BUTTON_PADX,
             pady=BUTTON_PADY,
             highlightthickness=BUTTON_HIGHLIGHT_THICKNESS,
-            command=lambda: self.add_binary(
-                "plutonium_binary", "plutonium-bootstrapper-win32.exe"
-            ),
+            command=lambda: self.select_path("Plutonium"),
         )
         plutonium.grid(row=0, column=1)
 
@@ -147,15 +143,12 @@ class CODLauncherGUI:
                 f"{config_key.capitalize()} Binary Path: {binary_path}",
             )
 
-    def select_path(self, game):
+    def select_path(self, app):
         path = filedialog.askdirectory()
         if path:
-            self.save_path(game, path)
-            messagebox.showinfo("Path Selected", f"Path for {game} saved: {path}")
-
-    def save_path(self, game, path):
-        self.config.set("paths", game, path)
-        self.update_config()
+            self.config.set("paths", app, path)
+            self.update_config()
+            messagebox.showinfo("Path Selected", f"Path for {app} saved: {path}")
 
     def update_name(self):
         self.config.set("launcher", "default_name", self.player_name.get())
@@ -183,15 +176,17 @@ class CODLauncherGUI:
 
         if any([x in gamemode for x in ["t4", "t5", "t6", "iw5mp"]]):
             # Plutonium
-            bin_path = self.config.get("paths", "plutonium_binary")
-            dir_path = os.path.dirname(bin_path)
+            dir_path = self.config.get("paths", "Plutonium")
+            bin_path = os.path.join(dir_path, "bin", "plutonium-bootstrapper-win32.exe")
             os.chdir(dir_path)
             command = f'"{bin_path}" {gamemode} "{abs_mode_dir}" -lan {name}'
             if "mp" in gamemode:
                 command += bots
         elif any([x in gamemode for x in ["iw4", "iw5", "iw6", "s1"]]):
             # Alterware
-            bin_path = self.config.get("paths", "alterware_binary")
+            dir_path = self.config.get("paths", "AlterWare")
+            bin_path = os.path.join(dir_path, "alterware-launcher.exe")
+            os.chdir(dir_path)
             mod = option["mod-flag"]
             mode = option["mode"]
             command = f'"{bin_path}" {mod} -p "{abs_mode_dir}" --pass "-{mode} {name}"'
