@@ -1,6 +1,7 @@
 *.exe
 *.cfg
 *.spec
+*.log
 .vscode
 __pycache__
 build

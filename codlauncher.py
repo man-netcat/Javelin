@@ -14,7 +14,6 @@ class CODLauncherGUI:
     def __init__(self):
         self.config = ConfigParser()
         self.base_path = os.getcwd()
-        self.selected_game = None  # Variable to store the selected game
         if not self.config.read(CONFIG_FILE):
             self.setup_config()
         self.setup_GUI()
@@ -32,6 +31,7 @@ class CODLauncherGUI:
         BUTTON_PADX = 10
         BUTTON_PADY = 5
         BUTTON_HIGHLIGHT_THICKNESS = 2
+        BUTTONS_PER_ROW = 5
 
         self.root = tk.Tk()
         self.root.title("COD Launcher")
@@ -52,44 +52,90 @@ class CODLauncherGUI:
         )
         name_button.pack(side=tk.LEFT, padx=BUTTON_PADX)
 
-        game_label = tk.Label(self.root, text="Select Game:")
-        game_label.pack()
-        self.game_combobox = ttk.Combobox(self.root, values=list(options.keys()))
-        self.game_combobox.bind("<<ComboboxSelected>>", self.update_mode_combobox)
-        self.game_combobox.pack()
+        binary_buttons_frame = tk.Frame(self.root)
+        binary_buttons_frame.pack()
 
-        mode_label = tk.Label(self.root, text="Select Mode:")
-        mode_label.pack()
-        self.mode_combobox = ttk.Combobox(self.root, values=[])
-        self.mode_combobox.pack()
+        alterware = tk.Button(
+            binary_buttons_frame,
+            text="Add AlterWare Binary",
+            width=BUTTON_WIDTH,
+            height=BUTTON_HEIGHT,
+            padx=BUTTON_PADX,
+            pady=BUTTON_PADY,
+            highlightthickness=BUTTON_HIGHLIGHT_THICKNESS,
+            command=lambda: self.add_binary(
+                "alterware_binary", "alterware-launcher.exe"
+            ),
+        )
+        alterware.grid(row=0, column=0)
 
-        def create_button(text, command):
+        plutonium = tk.Button(
+            binary_buttons_frame,
+            text="Add Plutonium Binary",
+            width=BUTTON_WIDTH,
+            height=BUTTON_HEIGHT,
+            padx=BUTTON_PADX,
+            pady=BUTTON_PADY,
+            highlightthickness=BUTTON_HIGHLIGHT_THICKNESS,
+            command=lambda: self.add_binary(
+                "plutonium_binary", "plutonium-bootstrapper-win32.exe"
+            ),
+        )
+        plutonium.grid(row=0, column=1)
+
+        path_buttons_frame = tk.Frame(self.root)
+        path_buttons_frame.pack()
+
+        i = 0
+        for game in options.keys():
+            button_command = lambda game=game: self.select_path(game)
             button = tk.Button(
-                self.root,
-                text=text,
+                path_buttons_frame,
+                text=f"Change {game} path",
                 width=BUTTON_WIDTH,
                 height=BUTTON_HEIGHT,
                 padx=BUTTON_PADX,
                 pady=BUTTON_PADY,
                 highlightthickness=BUTTON_HIGHLIGHT_THICKNESS,
-                command=command,
+                command=button_command,
             )
-            button.pack()
-            return button
+            button.grid(row=i // BUTTONS_PER_ROW, column=i % BUTTONS_PER_ROW)
+            i += 1
 
-        add_alterware_button = create_button(
-            "Add AlterWare Binary",
-            lambda: self.add_binary("alterware_binary", "alterware-launcher.exe"),
+        game_buttons_frame = tk.Frame(self.root)
+        game_buttons_frame.pack()
+
+        i = 0
+        for game, modes in options.items():
+            for option in modes:
+                mode = option["mode"]
+                button_command = lambda game=game, option=option: self.run_mode(
+                    game, option
+                )
+                button = tk.Button(
+                    game_buttons_frame,
+                    text=f"{game} {mode}",
+                    width=BUTTON_WIDTH,
+                    height=BUTTON_HEIGHT,
+                    padx=BUTTON_PADX,
+                    pady=BUTTON_PADY,
+                    highlightthickness=BUTTON_HIGHLIGHT_THICKNESS,
+                    command=button_command,
+                )
+                button.grid(row=i // BUTTONS_PER_ROW, column=i % BUTTONS_PER_ROW)
+                i += 1
+
+        exit = tk.Button(
+            self.root,
+            text="Exit",
+            width=BUTTON_WIDTH,
+            height=BUTTON_HEIGHT,
+            padx=BUTTON_PADX,
+            pady=BUTTON_PADY,
+            highlightthickness=BUTTON_HIGHLIGHT_THICKNESS,
+            command=self.root.quit,
         )
-        add_plutonium_button = create_button(
-            "Add Plutonium Binary",
-            lambda: self.add_binary(
-                "plutonium_binary", "plutonium-bootstrapper-win32.exe"
-            ),
-        )
-        change_path_button = create_button("Change Path", self.change_path)
-        start_button = create_button("Start Game", self.start_selected_mode)
-        exit_button = create_button("Exit", self.exit_program)
+        exit.pack()
 
     def add_binary(self, config_key, filename):
         binary_path = filedialog.askopenfilename(
@@ -103,12 +149,6 @@ class CODLauncherGUI:
                 f"{config_key.capitalize()} Binary Path: {binary_path}",
             )
 
-    def update_mode_combobox(self, event):
-        selected_game = self.game_combobox.get()
-        self.selected_game = selected_game  # Store the selected game
-        modes = [option["mode"] for option in options[selected_game]]
-        self.mode_combobox["values"] = modes
-
     def select_path(self, game):
         path = filedialog.askdirectory()
         if path:
@@ -119,10 +159,6 @@ class CODLauncherGUI:
         self.config.set("paths", game, path)
         self.update_config()
 
-    def change_path(self):
-        if self.selected_game:
-            self.select_path(self.selected_game)  # Use the selected game
-
     def update_name(self):
         self.config.set("launcher", "default_name", self.player_name.get())
         self.update_config()
@@ -130,15 +166,6 @@ class CODLauncherGUI:
     def update_config(self):
         with open(CONFIG_FILE, "w") as file:
             self.config.write(file)
-
-    def start_selected_mode(self):
-        selected_game = self.game_combobox.get()
-        selected_mode = self.mode_combobox.get()
-        option = next(
-            (o for o in options[selected_game] if o["mode"] == selected_mode), None
-        )
-        if option:
-            self.run_mode(selected_game, option)
 
     def run_mode(self, game, option):
         os.chdir(self.base_path)
@@ -159,6 +186,8 @@ class CODLauncherGUI:
         if any([x in gamemode for x in ["t4", "t5", "t6", "iw5mp"]]):
             # Plutonium
             bin_path = self.config.get("paths", "plutonium_binary")
+            dir_path = os.path.dirname(bin_path)
+            os.chdir(dir_path)
             command = f'"{bin_path}" {gamemode} "{abs_mode_dir}" -lan {name}'
             if "mp" in gamemode:
                 command += bots
@@ -169,11 +198,13 @@ class CODLauncherGUI:
             mode = option["mode"]
             command = f'"{bin_path}" {mod} -p "{abs_mode_dir}" --pass "-{mode} {name}"'
         elif gamemode == "h2sp":
+            # h2-mod
             h2_path = self.config.get("paths", "h2")
             os.chdir(h2_path)
             bin_path = os.path.join(h2_path, "h2-mod.exe")
             command = f'"{bin_path}" -singleplayer {name}"'
         elif gamemode == "t7":
+            # ezboiii
             t7_path = self.config.get("paths", "t7")
             os.chdir(t7_path)
             bin_path = os.path.join(t7_path, "boiii.exe")
@@ -195,10 +226,6 @@ class CODLauncherGUI:
             error_message = f"Failed to run the mode: {e}"
             messagebox.showerror("Error", error_message)
             return
-
-    def exit_program(self):
-        self.root.destroy()
-        exit()
 
     def start(self):
         self.root.mainloop()
