@@ -26,8 +26,8 @@ class CODLauncherGUI:
 
     def setup_GUI(self):
         # Constants for button properties
-        BUTTON_WIDTH = 15
-        BUTTON_HEIGHT = 2
+        BUTTON_WIDTH = 20
+        BUTTON_HEIGHT = 3
         BUTTON_PADX = 10
         BUTTON_PADY = 5
         BUTTON_HIGHLIGHT_THICKNESS = 2
