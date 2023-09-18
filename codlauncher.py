@@ -91,7 +91,7 @@ class CODLauncherGUI:
             button_command = lambda game=game: self.select_path(game)
             button = tk.Button(
                 path_buttons_frame,
-                text=f"Change {game} path",
+                text=f"Change {game} Path",
                 width=BUTTON_WIDTH,
                 height=BUTTON_HEIGHT,
                 padx=BUTTON_PADX,
@@ -114,7 +114,7 @@ class CODLauncherGUI:
                 )
                 button = tk.Button(
                     game_buttons_frame,
-                    text=f"{game} {mode}",
+                    text=f"{game} {mode.capitalize()}",
                     width=BUTTON_WIDTH,
                     height=BUTTON_HEIGHT,
                     padx=BUTTON_PADX,
