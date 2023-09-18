@@ -1,0 +1,10 @@
+*.exe
+*.cfg
+*.spec
+.vscode
+__pycache__
+build
+dist
+install.py
+plutonium
+alterware
