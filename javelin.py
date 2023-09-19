@@ -5,24 +5,25 @@ import tkinter.messagebox as messagebox
 from configparser import ConfigParser, NoOptionError
 from tkinter import filedialog, ttk
 
-from codlauncher_data import *
-
-CONFIG_FILE = "codlauncher.cfg"
+from javelin_data import *
 
 
-class CODLauncherGUI:
+class JavelinGUI:
     def __init__(self):
         self.config = ConfigParser()
         self.base_path = os.getcwd()
-        if not self.config.read(CONFIG_FILE):
-            self.setup_config()
+        self.setup_config()
         self.setup_GUI()
 
     def setup_config(self):
-        self.config.add_section("launcher")
-        self.config.add_section("client_paths")
-        self.config.add_section("game_paths")
-        self.update_config()
+        config_folder = os.path.dirname(CONFIG_FILE)
+        if not os.path.exists(config_folder):
+            os.makedirs(config_folder, exist_ok=True)
+        if not os.path.isfile(CONFIG_FILE):
+            self.config.add_section("launcher")
+            self.config.add_section("client_paths")
+            self.config.add_section("game_paths")
+            self.update_config()
 
     def setup_GUI(self):
         self.root = tk.Tk()
@@ -105,13 +106,7 @@ class CODLauncherGUI:
             highlightthickness=2,
             command=self.root.quit,
         )
-        exit_button.grid(
-            row=frame_index // FRAMES_PER_ROW,
-            column=frame_index % FRAMES_PER_ROW,
-            padx=10,
-            pady=5,
-            sticky="s",
-        )
+        exit_button.pack()
 
     def setup_options_tab(self):
         name_label = tk.Label(self.options_tab, text="Player Name:")
@@ -202,6 +197,8 @@ class CODLauncherGUI:
 
     def check_paths(self):
         for client, entry in self.client_paths_entries.items():
+            if not self.config.get("client_paths", client, fallback=""):
+                continue
             path = entry.get()
             bin = client_binaries[client]
             path_bin = os.path.join(path, bin)
@@ -212,6 +209,8 @@ class CODLauncherGUI:
                 )
 
         for entry, option in zip(self.game_paths_entries.values(), options):
+            if not self.config.get("client_paths", option["game_id"], fallback=""):
+                continue
             path = entry.get()
             valid_entry = True
             missing_bins = [
@@ -327,5 +326,6 @@ class CODLauncherGUI:
 
 
 if __name__ == "__main__":
-    launcher_gui = CODLauncherGUI()
+    CONFIG_FILE = os.path.join(os.getenv("LOCALAPPDATA"), "Javelin", "javelin.cfg")
+    launcher_gui = JavelinGUI()
     launcher_gui.start()

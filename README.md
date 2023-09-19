@@ -1,4 +1,4 @@
-# CODLauncher
+# Javelin
 
 Simple launcher for various COD clients.
 Supports the following clients:
