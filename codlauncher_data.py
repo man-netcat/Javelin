@@ -1,7 +1,7 @@
 options = [
     {
         "game_id": "IW4",
-        "bin": ["iw4-sp.exe", "iw4x.exe"],
+        "bin": ["iw4mp.exe", "iw4sp.exe"],
         "gamemodes": [
             {
                 "gamemode": "iw4sp",
@@ -17,7 +17,7 @@ options = [
     },
     {
         "game_id": "IW5",
-        "bin": ["iw5-mod.exe"],
+        "bin": ["iw5mp.exe", "iw5mp_server.exe", "iw5sp.exe"],
         "gamemodes": [
             {
                 "gamemode": "iw5sp",
@@ -32,7 +32,7 @@ options = [
     },
     {
         "game_id": "IW6",
-        "bin": ["iw6-mod.exe"],
+        "bin": ["iw6mp64_ship.exe", "iw6sp64_ship.exe"],
         "gamemodes": [
             {
                 "gamemode": "iw6sp",
@@ -48,7 +48,7 @@ options = [
     },
     {
         "game_id": "IW7",
-        "bin": ["iw7-mod.exe"],
+        "bin": ["iw7-mod.exe", "iw7_ship.exe", "runner.exe"],
         "gamemodes": [
             {
                 "gamemode": "iw7",
@@ -59,6 +59,7 @@ options = [
     },
     {
         "game_id": "T4",
+        "bin": ["CoDWaW.exe", "CoDWaWmp.exe"],
         "gamemodes": [
             {
                 "gamemode": "t4sp",
@@ -72,6 +73,7 @@ options = [
     },
     {
         "game_id": "T5",
+        "bin": ["BlackOps.exe", "BlackOpsMP.exe"],
         "gamemodes": [
             {
                 "gamemode": "t5sp",
@@ -85,6 +87,7 @@ options = [
     },
     {
         "game_id": "T6",
+        "bin": ["t6mp.exe", "t6zm.exe"],
         "gamemodes": [
             {
                 "gamemode": "t6zm",
@@ -98,7 +101,7 @@ options = [
     },
     {
         "game_id": "T7",
-        "bin": ["boiii.exe"],
+        "bin": ["boiii.exe", "BlackOps3.exe"],
         "gamemodes": [
             {
                 "gamemode": "t7",
@@ -109,7 +112,7 @@ options = [
     },
     {
         "game_id": "H2",
-        "bin": ["h2-mod.exe"],
+        "bin": ["h2-mod.exe", "MW2CR.exe"],
         "gamemodes": [
             {
                 "gamemode": "h2sp",
@@ -130,7 +133,7 @@ options = [
     },
     {
         "game_id": "S1",
-        "bin": ["s1-mod.exe"],
+        "bin": ["s1_sp64_ship.exe", "s1_mp64_ship.exe"],
         "gamemodes": [
             {
                 "gamemode": "s1sp",
@@ -155,3 +158,8 @@ options = [
         ],
     },
 ]
+
+client_binaries = {
+    "AlterWare": "alterware-launcher.exe",
+    "Plutonium": "bin\plutonium-bootstrapper-win32.exe",
+}

@@ -42,8 +42,10 @@ class CODLauncherGUI:
         self.game_frames = []
         self.update_launcher_tab()
         self.setup_options_tab()
+        self.check_paths()
 
     def update_launcher_tab(self):
+        FRAMES_PER_ROW = 1
         if self.game_frames:
             for frame in self.game_frames:
                 frame.destroy()
@@ -58,8 +60,8 @@ class CODLauncherGUI:
 
             game_frame = ttk.LabelFrame(self.launcher_tab, text=game_id)
             game_frame.grid(
-                row=frame_index // 3,
-                column=frame_index % 3,
+                row=frame_index // FRAMES_PER_ROW,
+                column=frame_index % FRAMES_PER_ROW,
                 padx=10,
                 pady=5,
                 sticky="nsew",
@@ -92,6 +94,24 @@ class CODLauncherGUI:
                 self.launcher_tab, text="No game added", font=("Helvetica", 12)
             )
             no_game_label.pack(fill="both", expand=True)
+
+        exit_button = tk.Button(
+            self.launcher_tab,
+            text="Exit",
+            width=15,
+            height=2,
+            padx=0,
+            pady=0,
+            highlightthickness=2,
+            command=self.root.quit,
+        )
+        exit_button.grid(
+            row=frame_index // FRAMES_PER_ROW,
+            column=frame_index % FRAMES_PER_ROW,
+            padx=10,
+            pady=5,
+            sticky="s",
+        )
 
     def setup_options_tab(self):
         name_label = tk.Label(self.options_tab, text="Player Name:")
@@ -171,6 +191,41 @@ class CODLauncherGUI:
                 entry = self.game_paths_entries[app]
             entry.delete(0, "end")
             entry.insert(0, path)
+        self.check_paths()
+
+    def is_valid_entry(self, entry: ttk.Entry, condition: bool):
+        if condition:
+            entry.config({"foreground": "green"})
+        else:
+            entry.config({"foreground": "red"})
+        return condition
+
+    def check_paths(self):
+        for client, entry in self.client_paths_entries.items():
+            path = entry.get()
+            bin = client_binaries[client]
+            path_bin = os.path.join(path, bin)
+            if not self.is_valid_entry(entry, os.path.isfile(path_bin)):
+                messagebox.showwarning(
+                    "Missing Executable",
+                    f'"{bin}" not found in the given path, please provide a correct path.',
+                )
+
+        for entry, option in zip(self.game_paths_entries.values(), options):
+            path = entry.get()
+            valid_entry = True
+            missing_bins = [
+                bin
+                for bin in option["bin"]
+                if not os.path.isfile(os.path.join(path, bin))
+            ]
+            if len(missing_bins) > 0:
+                messagebox.showwarning(
+                    "Missing Executable",
+                    f'"{", ".join([bin for bin in missing_bins])}" not found in the given path, please provide a correct path.',
+                )
+                valid_entry = False
+            self.is_valid_entry(entry, valid_entry)
 
     def save_options(self):
         self.config.set("launcher", "default_name", self.name_entry.get())
