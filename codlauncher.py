@@ -1,10 +1,9 @@
 import os
 import subprocess
 import tkinter as tk
-from tkinter import ttk
 import tkinter.messagebox as messagebox
 from configparser import ConfigParser, NoOptionError
-from tkinter import filedialog
+from tkinter import filedialog, ttk
 
 from codlauncher_data import *
 
@@ -78,9 +77,7 @@ class CODLauncherGUI:
                     pady=0,
                     highlightthickness=2,
                     command=button_command,
-                ).pack(
-                    side="left", padx=5
-                )  # Use side="left" to align buttons horizontally
+                ).pack(side="left", padx=5)
 
             self.game_frames.append(game_frame)
 
@@ -184,7 +181,6 @@ class CODLauncherGUI:
                 self.config.set("game_paths", game, path)
 
         self.update_config()
-        self.load_game_buttons()
 
         messagebox.showinfo(
             "Options Saved", "Changes have been saved to the config file."
