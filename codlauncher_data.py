@@ -2,19 +2,19 @@ options = {
     "IW4": [
         {
             "gamemode": "iw4sp",
-            "mod-flag": "iw4-sp",
+            "bin": "iw4-sp",
             "mode": "singleplayer",
         },
         {
             "gamemode": "iw4mp",
-            "mod-flag": "iw4x",
+            "bin": "iw4x",
             "mode": "multiplayer",
         },
     ],
     "IW5": [
         {
             "gamemode": "iw5sp",
-            "mod-flag": "iw5-mod",
+            "bin": "iw5-mod",
             "mode": "singleplayer",
         },
         {
@@ -25,14 +25,21 @@ options = {
     "IW6": [
         {
             "gamemode": "iw6sp",
-            "mod-flag": "iw6-mod",
+            "bin": "iw6-mod",
             "mode": "singleplayer",
         },
         {
             "gamemode": "iw6mp",
-            "mod-flag": "iw6-mod",
+            "bin": "iw6-mod",
             "mode": "multiplayer",
         },
+    ],
+    "IW7": [
+        {
+            "gamemode": "iw7",
+            "bin": "iw7-mod",
+            "mode": "game",
+        }
     ],
     "T4": [
         {
@@ -67,34 +74,36 @@ options = {
     "T7": [
         {
             "gamemode": "t7",
+            "bin": "boiii",
             "mode": "game",
         },
     ],
     "H2": [
         {
             "gamemode": "h2sp",
+            "bin": "h2-mod",
             "mode": "singleplayer",
         }
     ],
     "S1": [
         {
             "gamemode": "s1sp",
-            "mod-flag": "s1-mod",
+            "bin": "s1-mod",
             "mode": "singleplayer",
         },
         {
             "gamemode": "s1zm",
-            "mod-flag": "s1-mod",
+            "bin": "s1-mod",
             "mode": "zombies",
         },
         {
             "gamemode": "s1hm",
-            "mod-flag": "s1-mod",
+            "bin": "s1-mod",
             "mode": "survival",
         },
         {
             "gamemode": "s1mp",
-            "mod-flag": "s1-mod",
+            "bin": "s1-mod",
             "mode": "multiplayer",
         },
     ],

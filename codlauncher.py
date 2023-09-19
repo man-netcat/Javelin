@@ -3,7 +3,7 @@ import subprocess
 import tkinter as tk
 import tkinter.messagebox as messagebox
 from configparser import ConfigParser, NoOptionError
-from tkinter import filedialog, ttk
+from tkinter import filedialog
 
 from codlauncher_data import *
 
@@ -20,7 +20,8 @@ class CODLauncherGUI:
 
     def setup_config(self):
         self.config.add_section("launcher")
-        self.config.add_section("paths")
+        self.config.add_section("client_paths")
+        self.config.add_section("game_paths")
         self.config.set("launcher", "default_name", "Unknown Soldier")
         self.update_config()
 
@@ -133,20 +134,10 @@ class CODLauncherGUI:
         )
         exit.pack()
 
-    def add_binary(self, config_key, filename):
-        binary_path = filedialog.askopenfilename(filetypes=[("", filename)])
-        if binary_path:
-            self.config.set("paths", config_key, binary_path)
-            self.update_config()
-            messagebox.showinfo(
-                "Binary Path Added",
-                f"{config_key.capitalize()} Binary Path: {binary_path}",
-            )
-
     def select_path(self, app):
         path = filedialog.askdirectory()
         if path:
-            self.config.set("paths", app, path)
+            self.config.set("game_paths", app, path)
             self.update_config()
             messagebox.showinfo("Path Selected", f"Path for {app} saved: {path}")
 
@@ -162,7 +153,7 @@ class CODLauncherGUI:
         os.chdir(self.base_path)
         self.update_name()
         try:
-            abs_mode_dir = self.config.get("paths", game)
+            abs_mode_dir = self.config.get("game_paths", game)
         except NoOptionError as e:
             error_message = f"Failed to run the game: {e}"
             messagebox.showerror("Error", error_message)
@@ -176,7 +167,7 @@ class CODLauncherGUI:
 
         if any([x in gamemode for x in ["t4", "t5", "t6", "iw5mp"]]):
             # Plutonium
-            dir_path = self.config.get("paths", "Plutonium")
+            dir_path = self.config.get("client_paths", "Plutonium")
             bin_path = os.path.join(dir_path, "bin", "plutonium-bootstrapper-win32.exe")
             os.chdir(dir_path)
             command = f'"{bin_path}" {gamemode} "{abs_mode_dir}" -lan {name}'
@@ -184,23 +175,25 @@ class CODLauncherGUI:
                 command += bots
         elif any([x in gamemode for x in ["iw4", "iw5", "iw6", "s1"]]):
             # Alterware
-            dir_path = self.config.get("paths", "AlterWare")
+            dir_path = self.config.get("client_paths", "AlterWare")
             bin_path = os.path.join(dir_path, "alterware-launcher.exe")
             os.chdir(dir_path)
-            mod = option["mod-flag"]
+            bin = option["bin"]
             mode = option["mode"]
-            command = f'"{bin_path}" {mod} -p "{abs_mode_dir}" --pass "-{mode} {name}"'
+            command = f'"{bin_path}" {bin} -p "{abs_mode_dir}" --pass "-{mode} {name}"'
         elif gamemode == "h2sp":
             # h2-mod
-            h2_path = self.config.get("paths", "h2")
-            os.chdir(h2_path)
-            bin_path = os.path.join(h2_path, "h2-mod.exe")
+            game_path = self.config.get("game_paths", game)
+            os.chdir(game_path)
+            bin = f"{option['bin']}.exe"
+            bin_path = os.path.join(game_path, bin)
             command = f'"{bin_path}" -singleplayer {name}"'
-        elif gamemode == "t7":
-            # ezboiii
-            t7_path = self.config.get("paths", "t7")
-            os.chdir(t7_path)
-            bin_path = os.path.join(t7_path, "boiii.exe")
+        elif any([x in gamemode for x in ["t7", "iw7"]]):
+            # ezboiii and iw7-mod
+            game_path = self.config.get("game_paths", game)
+            os.chdir(game_path)
+            bin = f"{option['bin']}.exe"
+            bin_path = os.path.join(game_path, bin)
             command = f'"{bin_path}" -launch {name}"'
         else:
             error_message = f"Invalid input: {gamemode}"
