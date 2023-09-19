@@ -83,7 +83,17 @@ options = {
             "gamemode": "h2sp",
             "bin": "h2-mod",
             "mode": "singleplayer",
-        }
+        },
+        {
+            "gamemode": "h2hm",
+            "bin": "h2-mod",
+            "mode": "specops",
+        },
+        {
+            "gamemode": "h2hm",
+            "bin": "h2-mod",
+            "mode": "survival",
+        },
     ],
     "S1": [
         {

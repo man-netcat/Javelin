@@ -181,13 +181,14 @@ class CODLauncherGUI:
             bin = option["bin"]
             mode = option["mode"]
             command = f'"{bin_path}" {bin} -p "{abs_mode_dir}" --pass "-{mode} {name}"'
-        elif gamemode == "h2sp":
+        elif "h2" in gamemode:
             # h2-mod
             game_path = self.config.get("game_paths", game)
             os.chdir(game_path)
             bin = f"{option['bin']}.exe"
             bin_path = os.path.join(game_path, bin)
-            command = f'"{bin_path}" -singleplayer {name}"'
+            mode = option["mode"]
+            command = f'"{bin_path}" -singleplayer -mod "mods/{mode}" {name}"'
         elif any([x in gamemode for x in ["t7", "iw7"]]):
             # ezboiii and iw7-mod
             game_path = self.config.get("game_paths", game)
