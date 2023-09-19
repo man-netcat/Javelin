@@ -39,18 +39,24 @@ class CODLauncherGUI:
         self.notebook.add(self.launcher_tab, text="Launcher")
         self.notebook.add(self.options_tab, text="Options")
 
-        self.setup_launcher_tab()
+        self.game_frames = []
+        self.update_launcher_tab()
         self.setup_options_tab()
 
-    def setup_launcher_tab(self):
+    def update_launcher_tab(self):
+        if self.game_frames:
+            for frame in self.game_frames:
+                frame.destroy()
         self.game_frames = []
         frame_index = 0
 
-        for game, modes in options.items():
-            if not self.config.get("game_paths", game, fallback=""):
+        for option in options:
+            game_id = option["game_id"]
+            modes = option["gamemodes"]
+            if not self.config.get("game_paths", game_id, fallback=""):
                 continue
 
-            game_frame = ttk.LabelFrame(self.launcher_tab, text=game)
+            game_frame = ttk.LabelFrame(self.launcher_tab, text=game_id)
             game_frame.grid(
                 row=frame_index // 3,
                 column=frame_index % 3,
@@ -65,12 +71,12 @@ class CODLauncherGUI:
 
             for option in modes:
                 mode = option["mode"]
-                button_command = lambda game=game, option=option: self.run_game(
-                    game, option
+                button_command = lambda game_id=game_id, option=option: self.run_game(
+                    game_id, option
                 )
                 tk.Button(
                     buttons_frame,
-                    text=f"{game} {mode.capitalize()}",
+                    text=f"{game_id} {mode.capitalize()}",
                     width=15,
                     height=2,
                     padx=0,
@@ -131,9 +137,10 @@ class CODLauncherGUI:
             row_num += 1
 
         row_num = 1
-        for game, _ in options.items():
-            label = f"{game} Path:"
-            path = self.config.get("game_paths", game, fallback="")
+        for option in options:
+            game_id = option["game_id"]
+            label = f"{game_id} Path:"
+            path = self.config.get("game_paths", game_id, fallback="")
             ttk.Label(game_paths_frame, text=label).grid(
                 row=row_num, column=0, padx=5, pady=2, sticky="w"
             )
@@ -143,9 +150,9 @@ class CODLauncherGUI:
             ttk.Button(
                 game_paths_frame,
                 text="Browse",
-                command=lambda game=game: self.select_path(game),
+                command=lambda game_id=game_id: self.select_path(game_id),
             ).grid(row=row_num, column=2, padx=5, pady=2, sticky="ew")
-            self.game_paths_entries[game] = entry
+            self.game_paths_entries[game_id] = entry
             row_num += 1
 
         ttk.Button(self.options_tab, text="Save", command=self.save_options).grid(
@@ -174,7 +181,8 @@ class CODLauncherGUI:
             if path:
                 self.config.set("client_paths", client, path)
 
-        for game, _ in options.items():
+        for option in options:
+            game = option["game_id"]
             entry = self.game_paths_entries[game]
             path = entry.get()
             if path:
@@ -185,15 +193,16 @@ class CODLauncherGUI:
         messagebox.showinfo(
             "Options Saved", "Changes have been saved to the config file."
         )
+        self.update_launcher_tab()
 
     def update_config(self):
         with open(CONFIG_FILE, "w") as file:
             self.config.write(file)
 
-    def run_game(self, game, option):
+    def run_game(self, game_id, option):
         os.chdir(self.base_path)
         try:
-            abs_mode_dir = self.config.get("game_paths", game)
+            abs_mode_dir = self.config.get("game_paths", game_id)
         except NoOptionError as e:
             error_message = f"Failed to run the game: {e}"
             messagebox.showerror("Error", error_message)
@@ -220,13 +229,14 @@ class CODLauncherGUI:
             bin_path = os.path.join(dir_path, "alterware-launcher.exe")
             os.chdir(dir_path)
             bin = option["bin"]
-            mode = option["mode"]
-            command = (
-                f'"{bin_path}" {bin} -p "{abs_mode_dir}" --pass "-{mode} {name_str}"'
-            )
+            if gamemode == "iw4sp":
+                command = f'"{bin_path}" {bin} -p "{abs_mode_dir}'
+            else:
+                mode = option["mode"]
+                command = f'"{bin_path}" {bin} -p "{abs_mode_dir}" --pass "-{mode} {name_str}"'
         elif "h2" in gamemode:
             # h2-mod
-            game_path = self.config.get("game_paths", game)
+            game_path = self.config.get("game_paths", game_id)
             os.chdir(game_path)
             bin = f"{option['bin']}.exe"
             bin_path = os.path.join(game_path, bin)
@@ -234,7 +244,7 @@ class CODLauncherGUI:
             command = f'"{bin_path}" -singleplayer -mod "mods/{mode}" {name_str}"'
         elif any([x in gamemode for x in ["t7", "iw7"]]):
             # ezboiii and iw7-mod
-            game_path = self.config.get("game_paths", game)
+            game_path = self.config.get("game_paths", game_id)
             os.chdir(game_path)
             bin = f"{option['bin']}.exe"
             bin_path = os.path.join(game_path, bin)
