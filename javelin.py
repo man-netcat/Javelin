@@ -101,15 +101,18 @@ class JavelinGUI:
             no_game_label.pack(fill="both", expand=True)
 
     def setup_options_tab(self):
-        name_label = tk.Label(self.options_tab, text="Player Name:")
-        name_label.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
+        options_frame = ttk.LabelFrame(self.options_tab, text="Options")
+        options_frame.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
+
+        name_label = tk.Label(options_frame, text="Player Name:")
+        name_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
 
         player_name = self.config.get(
             "launcher", "default_name", fallback="Unknown Soldier"
         )
 
         player_name_stringvar = tk.StringVar(self.options_tab, value=player_name)
-        self.name_entry = tk.Entry(self.options_tab, textvariable=player_name_stringvar)
+        self.name_entry = tk.Entry(options_frame, textvariable=player_name_stringvar)
         self.name_entry.grid(row=0, column=1, padx=10, pady=5)
 
         client_paths_frame = ttk.LabelFrame(self.options_tab, text="Client Paths")
@@ -287,14 +290,14 @@ class JavelinGUI:
             bin = f"{option['bin']}.exe"
             bin_path = os.path.join(game_path, bin)
             mode = option["mode"]
-            command = f'"{bin_path}" -singleplayer -mod "mods/{mode}" {name_str}"'
+            command = f'"{bin_path}" -singleplayer -mod "mods/{mode}" {name_str}'
         elif any([x in gamemode for x in ["t7", "iw7"]]):
             # ezboiii and iw7-mod
             game_path = self.config.get("game_paths", game_id)
             os.chdir(game_path)
             bin = f"{option['bin']}.exe"
             bin_path = os.path.join(game_path, bin)
-            command = f'"{bin_path}" -launch {name_str}"'
+            command = f'"{bin_path}" -launch {name_str}'
         else:
             error_message = f"Invalid input: {gamemode}"
             messagebox.showerror("Error", error_message)
