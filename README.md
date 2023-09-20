@@ -1,6 +1,7 @@
 # Javelin
 
 Simple launcher for various COD clients.
+
 Supports the following clients:
 - t4, t5, t6 and iw5-mp for Plutonium
 - iw4-mod, iw5-mod, iw6-mod and s1-mod using AlterWare
