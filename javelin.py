@@ -291,8 +291,8 @@ class JavelinGUI:
             bin_path = os.path.join(game_path, bin)
             mode = option["mode"]
             command = f'"{bin_path}" -singleplayer -mod "mods/{mode}" {name_str}'
-        elif any([x in gamemode for x in ["t7", "iw7"]]):
-            # ezboiii and iw7-mod
+        elif any([x in gamemode for x in ["t7", "iw7", "t8"]]):
+            # ezboiii, iw7-mod and project-bo4
             game_path = self.config.get("game_paths", game_id)
             os.chdir(game_path)
             bin = f"{option['bin']}.exe"

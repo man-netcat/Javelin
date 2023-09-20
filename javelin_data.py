@@ -107,7 +107,18 @@ options = [
                 "gamemode": "t7",
                 "bin": "boiii",
                 "mode": "full game",
-            },
+            }
+        ],
+    },
+    {
+        "game_id": "T8",
+        "bin": ["d3d11.dll"],
+        "gamemodes": [
+            {
+                "gamemode": "t8",
+                "bin": "BlackOps4",
+                "mode": "full game",
+            }
         ],
     },
     {
