@@ -34,9 +34,6 @@ class JavelinGUI:
         self.root = tk.Tk()
         self.root.title("Javelin")
         self.root.iconbitmap("javelin.ico")
-        screen_width = self.root.winfo_screenwidth()
-        screen_height = self.root.winfo_screenheight()
-        self.root.geometry(f"{screen_width}x{screen_height}")
 
         self.notebook = ttk.Notebook(self.root)
         self.notebook.pack(fill="both", expand=True)
@@ -52,7 +49,7 @@ class JavelinGUI:
         self.check_paths()
 
     def update_launcher_tab(self):
-        FRAMES_PER_ROW = 1
+        FRAMES_PER_ROW = 2
         if self.game_frames:
             for frame in self.game_frames:
                 frame.destroy()
