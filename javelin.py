@@ -96,18 +96,6 @@ class JavelinGUI:
             )
             no_game_label.pack(fill="both", expand=True)
 
-        exit_button = tk.Button(
-            self.launcher_tab,
-            text="Exit",
-            width=15,
-            height=2,
-            padx=0,
-            pady=0,
-            highlightthickness=2,
-            command=self.root.quit,
-        )
-        exit_button.pack()
-
     def setup_options_tab(self):
         name_label = tk.Label(self.options_tab, text="Player Name:")
         name_label.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
