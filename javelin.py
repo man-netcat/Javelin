@@ -1,5 +1,6 @@
 import os
 import subprocess
+import sys
 import tkinter as tk
 import tkinter.messagebox as messagebox
 from configparser import ConfigParser, NoOptionError
@@ -33,7 +34,7 @@ class JavelinGUI:
     def setup_GUI(self):
         self.root = tk.Tk()
         self.root.title("Javelin")
-        self.root.iconbitmap("javelin.ico")
+        self.root.iconbitmap(sys.executable)
 
         self.notebook = ttk.Notebook(self.root)
         self.notebook.pack(fill="both", expand=True)
