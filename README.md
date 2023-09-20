@@ -15,3 +15,5 @@ You'll need to provide the paths for each game you have installed individually. 
 - For ezboiii, iw7-mod and h2-mod, drop the client executables in the corresponding game folders.
   
 All games must be legally owned on steam for this launcher to work. Cracked copies will __NOT__ work.
+
+Config is saved in Documents/Javelin.
