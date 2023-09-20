@@ -5,12 +5,17 @@ import tkinter.messagebox as messagebox
 from configparser import ConfigParser, NoOptionError
 from tkinter import filedialog, ttk
 
+from platformdirs import user_documents_dir
+
 from javelin_data import *
+
+CONFIG_FILE = os.path.join(user_documents_dir(), "Javelin", "javelin.cfg")
 
 
 class JavelinGUI:
     def __init__(self):
         self.config = ConfigParser()
+        self.config.read(CONFIG_FILE)
         self.base_path = os.getcwd()
         self.setup_config()
         self.setup_GUI()
@@ -27,7 +32,8 @@ class JavelinGUI:
 
     def setup_GUI(self):
         self.root = tk.Tk()
-        self.root.title("COD Launcher")
+        self.root.title("Javelin")
+        self.root.iconbitmap("javelin.ico")
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
         self.root.geometry(f"{screen_width}x{screen_height}")
@@ -197,7 +203,7 @@ class JavelinGUI:
                 )
 
         for entry, option in zip(self.game_paths_entries.values(), options):
-            if not self.config.get("client_paths", option["game_id"], fallback=""):
+            if not self.config.get("game_paths", option["game_id"], fallback=""):
                 continue
             path = entry.get()
             valid_entry = True
@@ -231,11 +237,11 @@ class JavelinGUI:
                 self.config.set("game_paths", game, path)
 
         self.update_config()
-
         messagebox.showinfo(
             "Options Saved", "Changes have been saved to the config file."
         )
         self.update_launcher_tab()
+        self.check_paths()
 
     def update_config(self):
         with open(CONFIG_FILE, "w") as file:
@@ -314,6 +320,5 @@ class JavelinGUI:
 
 
 if __name__ == "__main__":
-    CONFIG_FILE = os.path.join(os.getenv("LOCALAPPDATA"), "Javelin", "javelin.cfg")
     launcher_gui = JavelinGUI()
     launcher_gui.start()
