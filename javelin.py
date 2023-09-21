@@ -239,8 +239,8 @@ class JavelinGUI:
         bin_path = None
         command = None
         name = self.config.get("launcher", "default_name", fallback="Unknown Soldier")
-        name_str = f' +name "{name}"'
-        bots = " +set fs_mode mods/bots"
+        name_str = f'+name "{name}"'
+        bots = '+set fs_game "mods/bots"'
         gamemode = option["gamemode"]
 
         if gamemode == "t6sp":
@@ -255,7 +255,7 @@ class JavelinGUI:
             os.chdir(dir_path)
             command = f'"{bin_path}" {gamemode} "{abs_mode_dir}" -lan {name_str}'
             if "mp" in gamemode:
-                command += bots
+                command = f"{command} {bots}"
         elif any([x in gamemode for x in ["iw4", "iw5", "iw6", "s1"]]):
             # Alterware
             dir_path = self.config.get("client_paths", "AlterWare")
@@ -264,9 +264,11 @@ class JavelinGUI:
             bin = option["bin"]
             if gamemode == "iw4sp":
                 command = f'"{bin_path}" {bin} -p "{abs_mode_dir}'
+            elif gamemode == "iw4hm":
+                command = f'"{bin_path}" {bin} --bonus -p "{abs_mode_dir}" --pass "-multiplayer -nointro +set fs_game "mods/survival" {name_str} "'
             else:
                 mode = option["mode"]
-                command = f'"{bin_path}" {bin} --bonus -p "{abs_mode_dir}" --pass "-{mode} -nointro {name_str}"'
+                command = f'"{bin_path}" {bin} --bonus -p "{abs_mode_dir}" --pass "-{mode} -nointro {name_str} {bots}"'
         elif "iw3" in gamemode:
             # cod4x
             game_path = self.config.get("game_paths", game_id)

@@ -27,6 +27,11 @@ options = [
                 "bin": "iw4x",
                 "mode": "multiplayer",
             },
+            {
+                "gamemode": "iw4hm",
+                "bin": "iw4x",
+                "mode": "survival",
+            },
         ],
     },
     {
