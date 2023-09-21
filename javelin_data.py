@@ -162,7 +162,7 @@ options = [
                 "mode": "singleplayer",
             },
             {
-                "gamemode": "h2hm",
+                "gamemode": "h2so",
                 "mode": "specops",
             },
             {
