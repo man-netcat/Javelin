@@ -128,42 +128,38 @@ class JavelinGUI:
         self.client_paths_entries: dict[str, ttk.Entry] = {}
         self.game_paths_entries: dict[str, ttk.Entry] = {}
 
-        row_num = 1
-        for client in ["AlterWare", "Plutonium"]:
+        for i, client in enumerate(client_binaries.keys()):
             label = f"{client} Path:"
             path = self.config.get("client_paths", client, fallback="")
             ttk.Label(client_paths_frame, text=label).grid(
-                row=row_num, column=0, padx=5, pady=2, sticky="w"
+                row=i, column=0, padx=5, pady=2, sticky="w"
             )
             entry = ttk.Entry(client_paths_frame, width=100)
             entry.insert(0, path)
-            entry.grid(row=row_num, column=1, padx=5, pady=2, sticky="ew")
+            entry.grid(row=i, column=1, padx=5, pady=2, sticky="ew")
             ttk.Button(
                 client_paths_frame,
                 text="Browse",
                 command=lambda client=client: self.select_path(client),
-            ).grid(row=row_num, column=2, padx=5, pady=2, sticky="ew")
+            ).grid(row=i, column=2, padx=5, pady=2, sticky="ew")
             self.client_paths_entries[client] = entry
-            row_num += 1
 
-        row_num = 1
-        for option in options:
+        for i, option in enumerate(options):
             game_id = option["game_id"]
             label = f"{game_id} Path:"
             path = self.config.get("game_paths", game_id, fallback="")
             ttk.Label(game_paths_frame, text=label).grid(
-                row=row_num, column=0, padx=5, pady=2, sticky="w"
+                row=i, column=0, padx=5, pady=2, sticky="w"
             )
             entry = ttk.Entry(game_paths_frame, width=100)
             entry.insert(0, path)
-            entry.grid(row=row_num, column=1, padx=5, pady=2, sticky="ew")
+            entry.grid(row=i, column=1, padx=5, pady=2, sticky="ew")
             ttk.Button(
                 game_paths_frame,
                 text="Browse",
                 command=lambda game_id=game_id: self.select_path(game_id),
-            ).grid(row=row_num, column=2, padx=5, pady=2, sticky="ew")
+            ).grid(row=i, column=2, padx=5, pady=2, sticky="ew")
             self.game_paths_entries[game_id] = entry
-            row_num += 1
 
         ttk.Button(self.options_tab, text="Save", command=self.save_options).grid(
             row=3, column=0, columnspan=2, padx=10, pady=5
@@ -270,7 +266,14 @@ class JavelinGUI:
                 command = f'"{bin_path}" {bin} -p "{abs_mode_dir}'
             else:
                 mode = option["mode"]
-                command = f'"{bin_path}" {bin} -p "{abs_mode_dir}" --pass "-{mode} -nointro {name_str}"'
+                command = f'"{bin_path}" {bin} --bonus -p "{abs_mode_dir}" --pass "-{mode} -nointro {name_str}"'
+        elif "iw3" in gamemode:
+            # cod4x
+            game_path = self.config.get("game_paths", game_id)
+            os.chdir(game_path)
+            bin = f"{gamemode}.exe"
+            bin_path = os.path.join(game_path, bin)
+            command = f'"{bin_path}" {name_str}'
         elif "h1" in gamemode:
             # h1-mod
             game_path = self.config.get("game_paths", game_id)

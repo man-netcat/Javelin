@@ -1,5 +1,19 @@
 options = [
     {
+        "game_id": "IW3",
+        "bin": ["iw3mp.exe", "iw3sp.exe"],
+        "gamemodes": [
+            {
+                "gamemode": "iw3sp",
+                "mode": "singleplayer",
+            },
+            {
+                "gamemode": "iw3mp",
+                "mode": "multiplayer",
+            },
+        ],
+    },
+    {
         "game_id": "IW4",
         "bin": ["iw4mp.exe", "iw4sp.exe"],
         "gamemodes": [
