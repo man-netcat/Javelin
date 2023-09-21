@@ -4,7 +4,7 @@ Simple launcher for various COD clients.
 
 Supports the following clients:
 - t4, t5, t6 and iw5-mp using [Plutonium](https://plutonium.pw/)
-- iw4-mod, iw5-mod, iw6-mod and s1-mod using [AlterWare](https://alterware.dev/)
+- iw4-mod, iw5-mod, iw6-mod and s1-mod using [AlterWare](https://github.com/mxve/alterware-launcher)
 - [h1-mod](https://github.com/h1-mod/h1-mod)
 - [h2-mod](https://github.com/fedddddd/h2-mod)
 - [ezboiii](https://github.com/Ezz-lol/boiii-free)
