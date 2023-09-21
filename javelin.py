@@ -183,12 +183,8 @@ class JavelinGUI:
             entry.insert(0, path)
         self.check_paths()
 
-    def is_valid_entry(self, entry: ttk.Entry, condition: bool):
-        if condition:
-            entry.config({"foreground": "green"})
-        else:
-            entry.config({"foreground": "red"})
-        return condition
+    def mark_path(self, entry: ttk.Entry, condition: bool):
+        entry.config({"foreground": "green" if condition else "red"})
 
     def check_paths(self):
         for client, entry in self.client_paths_entries.items():
@@ -197,29 +193,16 @@ class JavelinGUI:
             path = entry.get()
             bin = client_binaries[client]
             path_bin = os.path.join(path, bin)
-            if not self.is_valid_entry(entry, os.path.isfile(path_bin)):
-                messagebox.showwarning(
-                    "Missing Executable",
-                    f'"{bin}" not found in the given path, please provide a correct path.',
-                )
+            self.mark_path(entry, os.path.isfile(path_bin))
 
         for entry, option in zip(self.game_paths_entries.values(), options):
             if not self.config.get("game_paths", option["game_id"], fallback=""):
                 continue
             path = entry.get()
-            valid_entry = True
-            missing_bins = [
-                bin
-                for bin in option["bin"]
-                if not os.path.isfile(os.path.join(path, bin))
-            ]
-            if len(missing_bins) > 0:
-                messagebox.showwarning(
-                    "Missing Executable",
-                    f'"{", ".join([bin for bin in missing_bins])}" not found in the given path, please provide a correct path.',
-                )
-                valid_entry = False
-            self.is_valid_entry(entry, valid_entry)
+            valid_entry = all(
+                [os.path.isfile(os.path.join(path, bin)) for bin in option["bin"]]
+            )
+            self.mark_path(entry, valid_entry)
 
     def save_options(self):
         self.config.set("launcher", "default_name", self.name_entry.get())
@@ -264,7 +247,12 @@ class JavelinGUI:
         bots = " +set fs_mode mods/bots"
         gamemode = option["gamemode"]
 
-        if any([x in gamemode for x in ["t4", "t5", "t6", "iw5mp"]]):
+        if gamemode == "t6sp":
+            dir_path = self.config.get("game_paths", game_id)
+            bin_path = os.path.join(dir_path, "t6sp.exe")
+            os.chdir(dir_path)
+            command = f'"{bin_path}"'
+        elif any([x in gamemode for x in ["t4", "t5", "t6", "iw5mp"]]):
             # Plutonium
             dir_path = self.config.get("client_paths", "Plutonium")
             bin_path = os.path.join(dir_path, "bin", "plutonium-bootstrapper-win32.exe")
@@ -282,13 +270,19 @@ class JavelinGUI:
                 command = f'"{bin_path}" {bin} -p "{abs_mode_dir}'
             else:
                 mode = option["mode"]
-                command = f'"{bin_path}" {bin} -p "{abs_mode_dir}" --pass "-{mode} {name_str}"'
+                command = f'"{bin_path}" {bin} -p "{abs_mode_dir}" --pass "-{mode} -nointro {name_str}"'
+        elif "h1" in gamemode:
+            # h1-mod
+            game_path = self.config.get("game_paths", game_id)
+            os.chdir(game_path)
+            bin_path = os.path.join(game_path, "h1-mod.exe")
+            mode = option["mode"]
+            command = f'"{bin_path}" -{mode} {name_str}'
         elif "h2" in gamemode:
             # h2-mod
             game_path = self.config.get("game_paths", game_id)
             os.chdir(game_path)
-            bin = f"{option['bin']}.exe"
-            bin_path = os.path.join(game_path, bin)
+            bin_path = os.path.join(game_path, "h2-mod.exe")
             mode = option["mode"]
             command = f'"{bin_path}" -singleplayer -mod "mods/{mode}" {name_str}'
         elif any([x in gamemode for x in ["t7", "iw7", "t8"]]):

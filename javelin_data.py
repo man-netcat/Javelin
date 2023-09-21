@@ -90,6 +90,10 @@ options = [
         "bin": ["t6mp.exe", "t6zm.exe"],
         "gamemodes": [
             {
+                "gamemode": "t6sp",
+                "mode": "singleplayer",
+            },
+            {
                 "gamemode": "t6zm",
                 "mode": "zombies",
             },
@@ -122,22 +126,33 @@ options = [
         ],
     },
     {
+        "game_id": "H1",
+        "bin": ["h1-mod.exe", "h1_sp64_ship.exe", "h1_mp64_ship.exe"],
+        "gamemodes": [
+            {
+                "gamemode": "h1sp",
+                "mode": "singleplayer",
+            },
+            {
+                "gamemode": "h1mp",
+                "mode": "multiplayer",
+            },
+        ],
+    },
+    {
         "game_id": "H2",
         "bin": ["h2-mod.exe", "MW2CR.exe"],
         "gamemodes": [
             {
                 "gamemode": "h2sp",
-                "bin": "h2-mod",
                 "mode": "singleplayer",
             },
             {
                 "gamemode": "h2hm",
-                "bin": "h2-mod",
                 "mode": "specops",
             },
             {
                 "gamemode": "h2hm",
-                "bin": "h2-mod",
                 "mode": "survival",
             },
         ],
