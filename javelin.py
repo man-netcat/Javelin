@@ -51,6 +51,10 @@ class JavelinGUI:
 
     def update_launcher_tab(self):
         FRAMES_PER_ROW = 2
+        FRAME_WIDTH = 60
+        FRAME_PADDING = 5
+        BUTTON_PADDING = 4
+        BUTTON_HEIGHT = 2
         if self.game_frames:
             for frame in self.game_frames:
                 frame.destroy()
@@ -63,18 +67,20 @@ class JavelinGUI:
             if not self.config.get("game_paths", game_id, fallback=""):
                 continue
 
-            game_frame = ttk.LabelFrame(self.launcher_tab, text=game_id)
+            game_frame = ttk.LabelFrame(
+                self.launcher_tab, text=game_id, width=FRAME_WIDTH
+            )
             game_frame.grid(
                 row=frame_index // FRAMES_PER_ROW,
                 column=frame_index % FRAMES_PER_ROW,
-                padx=10,
-                pady=5,
-                sticky="nsew",
+                padx=FRAME_PADDING,
+                pady=FRAME_PADDING,
             )
             frame_index += 1
 
             buttons_frame = tk.Frame(game_frame)
             buttons_frame.pack(fill="both", expand=True)
+            button_width = FRAME_WIDTH // len(modes) - BUTTON_PADDING
 
             for option in modes:
                 mode = option["mode"]
@@ -83,21 +89,18 @@ class JavelinGUI:
                 )
                 tk.Button(
                     buttons_frame,
-                    text=f"{game_id} {mode.capitalize()}",
-                    width=15,
-                    height=2,
-                    padx=0,
-                    pady=0,
-                    highlightthickness=2,
+                    text=mode.capitalize(),
+                    width=button_width,
+                    height=BUTTON_HEIGHT,
+                    padx=BUTTON_PADDING,
+                    pady=BUTTON_PADDING,
                     command=button_command,
                 ).pack(side="left", padx=5)
 
             self.game_frames.append(game_frame)
 
         if not self.game_frames:
-            no_game_label = tk.Label(
-                self.launcher_tab, text="No game added", font=("Helvetica", 12)
-            )
+            no_game_label = tk.Label(self.launcher_tab, text="No game added")
             no_game_label.pack(fill="both", expand=True)
 
     def setup_options_tab(self):
