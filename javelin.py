@@ -247,9 +247,9 @@ class JavelinGUI:
         gamemode = option["gamemode"]
 
         if gamemode == "t6sp":
-            dir_path = self.config.get("game_paths", game_id)
-            bin_path = os.path.join(dir_path, "t6sp.exe")
-            os.chdir(dir_path)
+            game_path = self.config.get("game_paths", game_id)
+            bin_path = os.path.join(game_path, "t6sp.exe")
+            os.chdir(game_path)
             command = f'"{bin_path}"'
         elif any([x in gamemode for x in ["t4", "t5", "t6", "iw5mp"]]):
             # Plutonium
@@ -259,7 +259,15 @@ class JavelinGUI:
             command = f'"{bin_path}" {gamemode} "{abs_mode_dir}" -lan {name_str}'
             if "mp" in gamemode:
                 command = f"{command} {bots}"
-        elif any([x in gamemode for x in ["iw4", "iw5", "iw6", "s1"]]):
+        elif any([x in gamemode for x in ["iw5", "iw6", "s1"]]):
+            # Alterware
+            dir_path = self.config.get("client_paths", "AlterWare")
+            bin_path = os.path.join(dir_path, "alterware-launcher.exe")
+            os.chdir(dir_path)
+            bin = option["bin"]
+            mode = option["mode"]
+            command = f'"{bin_path}" {bin} --bonus -p "{abs_mode_dir}" --pass "-{mode} {name_str}"'
+        elif "iw4" in gamemode:
             # Alterware
             dir_path = self.config.get("client_paths", "AlterWare")
             bin_path = os.path.join(dir_path, "alterware-launcher.exe")
@@ -270,8 +278,7 @@ class JavelinGUI:
             elif gamemode == "iw4hm":
                 command = f'"{bin_path}" {bin} --bonus -p "{abs_mode_dir}" --pass "-multiplayer -nointro +set fs_game "mods/survival" {name_str} "'
             else:
-                mode = option["mode"]
-                command = f'"{bin_path}" {bin} --bonus -p "{abs_mode_dir}" --pass "-{mode} -nointro {name_str} {bots}"'
+                command = f'"{bin_path}" {bin} --bonus -p "{abs_mode_dir}" --pass "-multiplayer -nointro {name_str} {bots}"'
         elif "iw3" in gamemode:
             # cod4x
             game_path = self.config.get("game_paths", game_id)
@@ -310,9 +317,12 @@ class JavelinGUI:
             messagebox.showerror("Error", error_message)
             return
 
+        self.run_command(command)
+
+    def run_command(self, command):
         try:
             print(command)
-            process = subprocess.run(command, shell=True)
+            process = subprocess.Popen(command, shell=True)
         except subprocess.CalledProcessError as e:
             error_message = f"Failed to run the game: {e}"
             messagebox.showerror("Error", error_message)
