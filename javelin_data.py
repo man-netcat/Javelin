@@ -14,6 +14,20 @@ options = [
         ],
     },
     {
+        "game_id": "T4",
+        "bin": ["CoDWaW.exe", "CoDWaWmp.exe"],
+        "gamemodes": [
+            {
+                "gamemode": "t4sp",
+                "mode": "singleplayer",
+            },
+            {
+                "gamemode": "t4mp",
+                "mode": "multiplayer",
+            },
+        ],
+    },
+    {
         "game_id": "IW4",
         "bin": ["iw4mp.exe", "iw4sp.exe"],
         "gamemodes": [
@@ -35,6 +49,20 @@ options = [
         ],
     },
     {
+        "game_id": "T5",
+        "bin": ["BlackOps.exe", "BlackOpsMP.exe"],
+        "gamemodes": [
+            {
+                "gamemode": "t5sp",
+                "mode": "singleplayer",
+            },
+            {
+                "gamemode": "t5mp",
+                "mode": "multiplayer",
+            },
+        ],
+    },
+    {
         "game_id": "IW5",
         "bin": ["iw5mp.exe", "iw5mp_server.exe", "iw5sp.exe"],
         "gamemodes": [
@@ -45,61 +73,6 @@ options = [
             },
             {
                 "gamemode": "iw5mp",
-                "mode": "multiplayer",
-            },
-        ],
-    },
-    {
-        "game_id": "IW6",
-        "bin": ["iw6mp64_ship.exe", "iw6sp64_ship.exe"],
-        "gamemodes": [
-            {
-                "gamemode": "iw6sp",
-                "bin": "iw6-mod",
-                "mode": "singleplayer",
-            },
-            {
-                "gamemode": "iw6mp",
-                "bin": "iw6-mod",
-                "mode": "multiplayer",
-            },
-        ],
-    },
-    {
-        "game_id": "IW7",
-        "bin": ["iw7-mod.exe", "iw7_ship.exe", "runner.exe"],
-        "gamemodes": [
-            {
-                "gamemode": "iw7",
-                "bin": "iw7-mod",
-                "mode": "full game",
-            }
-        ],
-    },
-    {
-        "game_id": "T4",
-        "bin": ["CoDWaW.exe", "CoDWaWmp.exe"],
-        "gamemodes": [
-            {
-                "gamemode": "t4sp",
-                "mode": "singleplayer",
-            },
-            {
-                "gamemode": "t4mp",
-                "mode": "multiplayer",
-            },
-        ],
-    },
-    {
-        "game_id": "T5",
-        "bin": ["BlackOps.exe", "BlackOpsMP.exe"],
-        "gamemodes": [
-            {
-                "gamemode": "t5sp",
-                "mode": "singleplayer",
-            },
-            {
-                "gamemode": "t5mp",
                 "mode": "multiplayer",
             },
         ],
@@ -123,56 +96,18 @@ options = [
         ],
     },
     {
-        "game_id": "T7",
-        "bin": ["boiii.exe", "BlackOps3.exe"],
+        "game_id": "IW6",
+        "bin": ["iw6mp64_ship.exe", "iw6sp64_ship.exe"],
         "gamemodes": [
             {
-                "gamemode": "t7",
-                "bin": "boiii",
-                "mode": "full game",
-            }
-        ],
-    },
-    {
-        "game_id": "T8",
-        "bin": ["d3d11.dll"],
-        "gamemodes": [
-            {
-                "gamemode": "t8",
-                "bin": "BlackOps4",
-                "mode": "full game",
-            }
-        ],
-    },
-    {
-        "game_id": "H1",
-        "bin": ["h1-mod.exe", "h1_sp64_ship.exe", "h1_mp64_ship.exe"],
-        "gamemodes": [
-            {
-                "gamemode": "h1sp",
+                "gamemode": "iw6sp",
+                "bin": "iw6-mod",
                 "mode": "singleplayer",
             },
             {
-                "gamemode": "h1mp",
+                "gamemode": "iw6mp",
+                "bin": "iw6-mod",
                 "mode": "multiplayer",
-            },
-        ],
-    },
-    {
-        "game_id": "H2",
-        "bin": ["h2-mod.exe", "MW2CR.exe"],
-        "gamemodes": [
-            {
-                "gamemode": "h2sp",
-                "mode": "singleplayer",
-            },
-            {
-                "gamemode": "h2so",
-                "mode": "specops",
-            },
-            {
-                "gamemode": "h2hm",
-                "mode": "survival",
             },
         ],
     },
@@ -199,6 +134,71 @@ options = [
                 "gamemode": "s1mp",
                 "bin": "s1-mod",
                 "mode": "multiplayer",
+            },
+        ],
+    },
+    {
+        "game_id": "T7",
+        "bin": ["boiii.exe", "BlackOps3.exe"],
+        "gamemodes": [
+            {
+                "gamemode": "t7",
+                "bin": "boiii",
+                "mode": "full game",
+            }
+        ],
+    },
+    {
+        "game_id": "IW7",
+        "bin": ["iw7-mod.exe", "iw7_ship.exe", "runner.exe"],
+        "gamemodes": [
+            {
+                "gamemode": "iw7",
+                "bin": "iw7-mod",
+                "mode": "full game",
+            }
+        ],
+    },
+    {
+        "game_id": "H1",
+        "bin": ["h1-mod.exe", "h1_sp64_ship.exe", "h1_mp64_ship.exe"],
+        "gamemodes": [
+            {
+                "gamemode": "h1sp",
+                "mode": "singleplayer",
+            },
+            {
+                "gamemode": "h1mp",
+                "mode": "multiplayer",
+            },
+        ],
+    },
+    {
+        "game_id": "T8",
+        "bin": ["d3d11.dll"],
+        "gamemodes": [
+            {
+                "gamemode": "t8",
+                "bin": "BlackOps4",
+                "mode": "full game",
+            }
+        ],
+    },
+    {
+        "game_id": "H2",
+        "bin": ["h2-mod.exe", "MW2CR.exe"],
+        "gamemodes": [
+            {
+                "gamemode": "h2sp",
+                "mode": "singleplayer",
+            },
+            {
+                "gamemode": "h2so",
+                "mode": "specops",
+            },
+            {
+                "gamemode": "h2hm",
+                "mode": "survival",
             },
         ],
     },
