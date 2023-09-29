@@ -63,12 +63,13 @@ class JavelinGUI:
 
         for option in options:
             game_id = option["game_id"]
+            game_name = option["game_name"]
             modes = option["gamemodes"]
             if not self.config.get("game_paths", game_id, fallback=""):
                 continue
 
             game_frame = ttk.LabelFrame(
-                self.launcher_tab, text=game_id, width=FRAME_WIDTH
+                self.launcher_tab, text=game_name, width=FRAME_WIDTH
             )
             game_frame.grid(
                 row=frame_index // FRAMES_PER_ROW,
@@ -149,7 +150,8 @@ class JavelinGUI:
 
         for i, option in enumerate(options):
             game_id = option["game_id"]
-            label = f"{game_id} Path:"
+            game_name = option["game_name"]
+            label = f"{game_name} Path:"
             path = self.config.get("game_paths", game_id, fallback="")
             ttk.Label(game_paths_frame, text=label).grid(
                 row=i, column=0, padx=5, pady=2, sticky="w"
@@ -323,6 +325,11 @@ class JavelinGUI:
         try:
             print(command)
             process = subprocess.Popen(command, shell=True)
+            stdout, stderr = process.communicate()
+            return_code = process.returncode
+            print(return_code)
+            print(stdout)
+            print(stderr)
         except subprocess.CalledProcessError as e:
             error_message = f"Failed to run the game: {e}"
             messagebox.showerror("Error", error_message)
